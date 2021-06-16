@@ -16,16 +16,8 @@ public class JpaMain {
 
         try {
             // 영속
-            Member member = em.find(Member.class, 150L);
-            member.setName("A");
-
-            // 영속성 컨텍스트에서 memeber를 제거한다. member 객체는 준영속 상태가 된다.
-            em.detach(member);
-
-            // 준영속 상태를 만드는 다른 방법 2가지 
-            // em.close(); // 영속성 컨텍스트를 완전히 초기화
-            // em.close(); // 영속성 컨텍스트를 종료
-
+            Member member = new Member(1L, "A");
+            em.persist(member);
             tx.commit(); // 업데이트가 되지 않음.
         } catch (Exception e) {
             tx.rollback();
