@@ -15,23 +15,15 @@ public class JpaMain {
         tx.begin();
 
         try {
-            // 객체를 생성한 상태(비영속)
-            Member member = new Member();
-            member.setId(101L);
-            member.setName("HelloJPA");
+            // 쿼리가 최초 한 번만 날아간다. DB에서 member를 가져온다.
+            Member findMember1 = em.find(Member.class, 101L);
+            // 1차 캐시에서 member를 가져온다.
+            Member findMember2 = em.find(Member.class, 101L);
 
-            // 객체를 저장한 상태(영속)
-            System.out.println("====BEFORE====");
-            em.persist(member);
-            System.out.println("====AFTER====");
+            // 영속 엔티티 동일성 보장
+            System.out.println("result = " + (findMember1 == findMember2));
 
-            // 영속성 컨텍스트의 1차 캐시에서 조회하기 때문에 select 쿼리가 따로 안나간다!
-            Member findMember = em.find(Member.class, 101L);
-
-            System.out.println("findMember.id = " + findMember.getId());
-            System.out.println("findMember.name = " + findMember.getName());
-
-            tx.commit(); // 이 시점에서 실제로 쿼리가 날아감
+            tx.commit();
         } catch (Exception e) {
             tx.rollback();
         } finally {
