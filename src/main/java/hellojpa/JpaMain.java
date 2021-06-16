@@ -15,10 +15,12 @@ public class JpaMain {
         tx.begin();
 
         try {
-            // 영속
-            Member member = new Member(1L, "A");
+            Member member = new Member();
+            member.setId(1L);
+            member.setUsername("jujubebat");
+            member.setRoleType(RoleType.USER);
             em.persist(member);
-            tx.commit(); // 업데이트가 되지 않음.
+            tx.commit();
         } catch (Exception e) {
             tx.rollback();
         } finally {
