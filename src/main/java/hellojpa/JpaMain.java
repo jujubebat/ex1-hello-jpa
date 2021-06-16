@@ -16,9 +16,15 @@ public class JpaMain {
 
         try {
             // 영속
-            Member member = em.find(Member.class, 150L);
-            member.setName("Z"); // 이렇게만 해도 업데이트 쿼리가 자동으로 날아간다.
-            System.out.println("===============");
+            Member member = new Member(201L, "member200");
+            em.persist(member); // member와 쿼리문이 영속성 컨텍스트에 저장된다.
+
+            // 영속성 컨텍스트에 저장된 쿼리문이 DB에 반영된다.
+            // 플러시를 한다고 1차캐시가 지워지는 것은 아님!
+            // 오직 엔티티 변화를 감지하고 영속성 컨텍스트에 있는 쓰지 전용 SQL 저장소에 있는 쿼리를 날린다.
+            em.flush();
+
+            System.out.println("===========");
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
