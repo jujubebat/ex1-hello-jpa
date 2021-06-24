@@ -1,41 +1,23 @@
 package hellojpa;
 
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 @Entity
 public class Member {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 데이터베이스에 위임 ex) mysql 의 auto_increment
+    // @GeneratedValue(strategy = GenerationType.AUTO) // db 방언에 따라 자동 지정
+    // @GeneratedValue(strategy = GenerationType.SEQUENCE) // 데이터베이스 시퀀스 오브젝트 사용, 숫자만 가능
+    // @GeneratedValue(strategy = GenerationType.TABLE) // 키 생성 전용 테이블을 하나 만들어서 데이터베이스 시퀀스를 흉내내는 전략 (모든 데이터베이스에 적용 가능, but 테이블을 추가로 사용하므로 성능이슈가 있음)
     private Long id;
 
-    @Column(name = "name", updatable = false, nullable = false, length = 100, columnDefinition = "varchar(100) default 'EMPTY'")
+    @Column
     private String username;
-
-    private Integer age;
-
-    @Enumerated(EnumType.STRING) // enum 사용
-    private RoleType roleType;
-
-    @Temporal(TemporalType.TIMESTAMP) // 날짜시간 타입 사용
-    private Date createdDate;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastModifiedDate;
-
-    @Lob // 큰 데이터 넣을때 사용
-    private String description;
-
-    @Transient // db 속성으로 안만들어진다. 메모리에서만 쓰겠다는 뜻
-    private int temp;
 
     public Member() {
     }
@@ -54,53 +36,5 @@ public class Member {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public RoleType getRoleType() {
-        return roleType;
-    }
-
-    public void setRoleType(RoleType roleType) {
-        this.roleType = roleType;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getTemp() {
-        return temp;
-    }
-
-    public void setTemp(int temp) {
-        this.temp = temp;
     }
 }
