@@ -17,7 +17,7 @@ public class Product {
     private String name;
 
     @OneToMany(mappedBy = "product")
-    private List<MemberProduct> memberProducts = new ArrayList<>();
+    private final List<MemberProduct> memberProducts = new ArrayList<>();
 
     public Long getId() {
         return id;
