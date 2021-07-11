@@ -4,6 +4,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceUnitUtil;
+import org.hibernate.Hibernate;
 
 public class JpaMain {
 
@@ -23,15 +25,14 @@ public class JpaMain {
 
             Member refMember = em.getReference(Member.class, member1.getId());
             System.out.println("refMember.getClass() = " + refMember.getClass()); // Proxy Member
+            // 프록시 인스턴스의 초기화 여부 확인
+            System.out.println("isLoaded = " + emf.getPersistenceUnitUtil().isLoaded(refMember)); //
 
-            // 영속성 컨텍스트에서 제외한다.
-            //em.detach(refMember);
+            Hibernate.initialize(refMember); // 하이버네이트 사용해서 프록시 강제 초기화
+            // 또는 refMember.getUsername(); // 참고: JPA 표준은 강제 초기화 없음 
 
-            // 또는 영속성 컨텍스트를 clear 해보자
-            em.clear();
+            System.out.println("isLoaded = " + emf.getPersistenceUnitUtil().isLoaded(refMember));
 
-            // 영속성 컨텍스트에서 프록시 Member가 위에서 제외되었으므로 예외 발생!
-            refMember.getUsername();
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
