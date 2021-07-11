@@ -24,15 +24,18 @@ public class JpaMain {
             Member refMember = em.getReference(Member.class, member1.getId());
             System.out.println("refMember.getClass() = " + refMember.getClass()); // Proxy Member
 
-            // 여기서 em.find를 하면 Proxy Member가 반환된다!
-            Member findMember = em.find(Member.class, member1.getId());
-            System.out.println("findMember.getClass() = " + findMember.getClass());  // Proxy Member
+            // 영속성 컨텍스트에서 제외한다.
+            //em.detach(refMember);
 
-            System.out.println("a == a: " + (refMember == findMember)); // == 비교를 해서 true가 되기로하기 위한 의도
+            // 또는 영속성 컨텍스트를 clear 해보자
+            em.clear();
 
+            // 영속성 컨텍스트에서 프록시 Member가 위에서 제외되었으므로 예외 발생!
+            refMember.getUsername();
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
+            e.printStackTrace();
         } finally {
             em.close();
         }
