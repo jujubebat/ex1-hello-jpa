@@ -21,13 +21,14 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            Member m1 = em.find(Member.class, member1.getId());
-            System.out.println("m1 = " + m1.getClass());
+            Member refMember = em.getReference(Member.class, member1.getId());
+            System.out.println("refMember.getClass() = " + refMember.getClass()); // Proxy Member
 
-            // reference는 프록시가 아니다. 위에서 이미 영속성 컨텍스트에 Member를 올려뒀기 때문!
-            Member reference = em.getReference(Member.class, member1.getId());
-            System.out.println("reference.getClass() = " + reference.getClass());
-            System.out.println("a == a: " + (m1 == reference));
+            // 여기서 em.find를 하면 Proxy Member가 반환된다!
+            Member findMember = em.find(Member.class, member1.getId());
+            System.out.println("findMember.getClass() = " + findMember.getClass());  // Proxy Member
+
+            System.out.println("a == a: " + (refMember == findMember)); // == 비교를 해서 true가 되기로하기 위한 의도
 
             tx.commit();
         } catch (Exception e) {
