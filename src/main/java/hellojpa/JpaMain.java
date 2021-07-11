@@ -14,22 +14,26 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = new Member();
-            member.setUsername("hello");
-            em.persist(member);
+            Member member1 = new Member();
+            member1.setUsername("member1");
+            em.persist(member1);
+
+            Member member2 = new Member();
+            member2.setUsername("member2");
+            em.persist(member2);
 
             em.flush();
             em.clear();
 
-//            Member findMember = em.find(Member.class, member.getId());
-//            System.out.println("findMember.getId() = " + findMember.getId());
-//            System.out.println("findMember.getUsername() = " + findMember.getUsername());
+            Member m1 = em.find(Member.class, member1.getId());
+//            Member m2 = em.find(Member.class, member2.getId());
+//            System.out.println("m1 == m2: " + (m1.getClass() == m2.getClass()));
 
-            Member findMember = em.getReference(Member.class, member.getId());
-            System.out.println("findMember = " + findMember.getClass()); // 프록시 클래스임을 확인할 수 있다.
-            System.out.println("findMember.getId() = " + findMember.getId());
-            System.out.println("findMember.getUsername() = " + findMember.getUsername());
-            System.out.println("findMember.getUsername() = " + findMember.getUsername());
+            // 프록시 객체 비교는 instanceof로 해야한다.
+            Member m2 = em.getReference(Member.class, member2.getId());
+            System.out.println("m1 == m2: " + (m1.getClass() == m2.getClass()));
+            System.out.println("m1 instanceof Member: " + (m1 instanceof Member));
+            System.out.println("m2 instanceof Member: " + (m2 instanceof Member));
 
             tx.commit();
         } catch (Exception e) {
