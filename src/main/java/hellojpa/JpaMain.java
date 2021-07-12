@@ -21,9 +21,15 @@ public class JpaMain {
             parent.addChild(child1);
             parent.addChild(child2);
 
-            em.persist(parent);
-        //   em.persist(child1);
-        //   em.persist(child2);
+            em.persist(parent); // 부모 클래스 기준
+
+            em.flush();
+            em.clear();
+
+            Parent findParent = em.find(Parent.class, parent.getId());
+            findParent.getChildList().remove(0); // 부모 클래스 기준
+
+            // 부모 엔티티를 통해서 자식 엔티티의 생명 주기를 관리할 수 있다!!!!
 
             tx.commit();
         } catch (Exception e) {
