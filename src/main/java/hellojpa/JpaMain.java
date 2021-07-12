@@ -14,22 +14,12 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Child child1 = new Child();
-            Child child2 = new Child();
+            Member member = new Member();
+            member.setUsername("hello");
+            member.setHomeAddress(new Address("city", "street", "1000"));
+            member.setWorkPeriod(new Period());
 
-            Parent parent = new Parent();
-            parent.addChild(child1);
-            parent.addChild(child2);
-
-            em.persist(parent); // 부모 클래스 기준
-
-            em.flush();
-            em.clear();
-
-            Parent findParent = em.find(Parent.class, parent.getId());
-            findParent.getChildList().remove(0); // 부모 클래스 기준
-
-            // 부모 엔티티를 통해서 자식 엔티티의 생명 주기를 관리할 수 있다!!!!
+            em.persist(member);
 
             tx.commit();
         } catch (Exception e) {
