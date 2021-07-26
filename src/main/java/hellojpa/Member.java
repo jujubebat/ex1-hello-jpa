@@ -1,5 +1,7 @@
 package hellojpa;
 
+import static javax.persistence.CascadeType.ALL;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Member {
@@ -25,11 +28,11 @@ public class Member {
         this.favoriteFoods = favoriteFoods;
     }
 
-    public List<Address> getAddressHistory() {
+    public List<AddressEntity> getAddressHistory() {
         return addressHistory;
     }
 
-    public void setAddressHistory(List<Address> addressHistory) {
+    public void setAddressHistory(List<AddressEntity> addressHistory) {
         this.addressHistory = addressHistory;
     }
 
@@ -46,16 +49,14 @@ public class Member {
 
     @ElementCollection
     @CollectionTable(name = "FAVORITE_FOODS", joinColumns =
-    @JoinColumn(name = "MEMBER_ID")
+        @JoinColumn(name = "MEMBER_ID")
     )
     @Column(name = "FOOD_NAME")
     private Set<String> favoriteFoods = new HashSet<>();
 
-    @ElementCollection
-    @CollectionTable(name = "ADDRESS", joinColumns =
-    @JoinColumn(name = "MEMBER_ID")
-    )
-    private List<Address> addressHistory = new ArrayList<>();
+    @OneToMany(cascade = ALL, orphanRemoval = true)
+    @JoinColumn(name ="MEMBER_ID")
+    private List<AddressEntity> addressHistory = new ArrayList<>();
 
     public Address getHomeAddress() {
         return homeAddress;
